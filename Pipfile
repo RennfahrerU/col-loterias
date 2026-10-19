@@ -9,6 +9,7 @@ requests = "*"
 matplotlib = "*"
 seaborn = "*"
 streamlit = "*"
+flet = "*"
 
 [dev-packages]
 ipykernel = "*"

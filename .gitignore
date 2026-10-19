@@ -1,0 +1,9 @@
+# DB de desarrollo (en producción vive en el almacenamiento de la plataforma)
+.data/
+
+# Python
+__pycache__/
+*.pyc
+
+# Flet build
+build/
