@@ -1,0 +1,23 @@
+[project]
+name = "cruz-de-la-suerte"
+version = "1.0.0"
+description = "Cruz de la suerte + estadística de loterías"
+requires-python = ">=3.12"
+# Dependencias para el runtime embebido del APK (flet build las lee de aquí).
+# El entorno de desarrollo se gestiona con Pipenv (Pipfile).
+dependencies = [
+    "flet>=1.0.4",
+    "requests>=2.31",
+]
+
+[tool.flet]
+org = "com.johnsoft"
+product = "Cruz de la suerte"
+company = "johnsoft"
+copyright = "johnsoft"
+bundle_id = "com.johnsoft.cruzdelasuerte"
+build_number = 1
+build_version = "1.0.0"
+
+[tool.flet.app]
+path = "src"

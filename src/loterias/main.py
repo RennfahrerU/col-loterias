@@ -1,8 +1,6 @@
 """Punto de entrada de la app Flet (Cruz de la suerte + Estadística).
 
 Ejecutar en desarrollo desde la raíz del proyecto:
-    pipenv run flet run loterias/main.py
-o:
     pipenv run python -m loterias.main
 """
 
@@ -10,31 +8,18 @@ from __future__ import annotations
 
 import flet as ft
 
+from loterias.data import db, sync
 from loterias.ui.view_cruz import crear_vista_cruz
-
-
-def _vista_stats_placeholder() -> ft.Control:
-    return ft.Container(
-        padding=20,
-        alignment=ft.Alignment.CENTER,
-        content=ft.Column(
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            controls=[
-                ft.Icon(ft.Icons.INSIGHTS, size=48, color=ft.Colors.OUTLINE),
-                ft.Text("Estadística", size=22, weight=ft.FontWeight.BOLD),
-                ft.Text("Próximamente: datos y análisis.",
-                        color=ft.Colors.ON_SURFACE_VARIANT),
-            ],
-        ),
-    )
+from loterias.ui.view_stats import VistaStats
 
 
 def main(page: ft.Page) -> None:
     page.title = "Cruz de la suerte"
     page.theme = ft.Theme(color_scheme_seed=ft.Colors.INDIGO)
 
+    vista_stats = VistaStats(page)
     contenido = ft.Container(expand=True)
-    vistas = [crear_vista_cruz(page), _vista_stats_placeholder()]
+    vistas = [crear_vista_cruz(page), vista_stats.control]
     contenido.content = vistas[0]
 
     def cambiar_vista(e: ft.Event[ft.NavigationBar]) -> None:
@@ -49,6 +34,17 @@ def main(page: ft.Page) -> None:
         ],
     )
     page.add(ft.SafeArea(expand=True, content=contenido))
+
+    # Sync incremental al arranque, en segundo plano (no bloquea la UI).
+    def _sync_inicial() -> None:
+        con = db.conectar()
+        try:
+            sync.sincronizar(con)
+        finally:
+            con.close()
+        vista_stats.cargar()
+
+    page.run_thread(_sync_inicial)
 
 
 if __name__ == "__main__":

@@ -14,12 +14,12 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
 CSV = RAIZ / "data_loterias_completo.csv"
-SEED = RAIZ / "loterias" / "data" / "seed.db"
+SEED = RAIZ / "src" / "loterias" / "data" / "seed.db"
 
 # Esquema único, importado del módulo de la app para no duplicarlo.
 import sys
 
-sys.path.insert(0, str(RAIZ))
+sys.path.insert(0, str(RAIZ / "src"))
 from loterias.config import LOTERIAS  # noqa: E402
 from loterias.data.db import ESQUEMA  # noqa: E402
 

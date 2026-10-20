@@ -37,8 +37,9 @@ def ruta_db() -> Path:
     if base:
         carpeta = Path(base)
     else:
-        # Fallback de desarrollo (p.ej. `python -m loterias.main` sin Flet).
-        carpeta = Path(__file__).resolve().parents[2] / ".data"
+        # Fallback de desarrollo (fuera de Flet). Raíz del proyecto:
+        # src/loterias/data/db.py -> parents[3] = raíz.
+        carpeta = Path(__file__).resolve().parents[3] / ".data"
     carpeta.mkdir(parents=True, exist_ok=True)
     return carpeta / "loterias.db"
 
